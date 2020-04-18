@@ -1,4 +1,6 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
+
 #
 # Mac OS X webarchive is a binary format of a plist file. You can extract the contents manually:
 #  1. convert the plist file into XML by "plutil -convert xml1 file.webarchive"
@@ -21,6 +23,6 @@ require 'rubygems'
 require_relative 'lib/unwebarchive'
 
 webarchive = ARGV.shift
-exportdir = File.basename(webarchive, ".webarchive")
+exportdir = File.basename(webarchive, '.webarchive')
 
 UnWebarchive.extract(webarchive, exportdir)

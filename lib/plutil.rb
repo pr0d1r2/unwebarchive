@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'active_support/core_ext/array'
 require 'json'
 
@@ -37,10 +39,10 @@ class Plutil
   #   Plutil.insert('keypath', "-bool", "YES", file: plist, &:read)
   #
   class << self
-    alias_method :plutil, :call
+    alias plutil call
 
-    [:remove, :extract, :insert].each do |command|
-      define_method(command) {|*args, &block| plutil(command, *args, &block) }
+    %i[remove extract insert].each do |command|
+      define_method(command) { |*args, &block| plutil(command, *args, &block) }
     end
   end
 
@@ -51,7 +53,7 @@ class Plutil
   #   end
   #
   def self.convert(path, to: :json, &block)
-    to = "xml1" if to.to_s == 'xml'
+    to = 'xml1' if to.to_s == 'xml'
     plutil(:convert, to, out: :stdin, file: path.to_s, &block)
   end
 
@@ -76,7 +78,7 @@ class Plutil
     options = args.extract_options!
     @command, *@args = *args
     @in, @out, @mode = *options.values_at(:in, :out, :mode)
-    @in   ||= options[:file]
+    @in ||= options[:file]
     @mode ||= auto_mode
   end
 
@@ -87,13 +89,22 @@ class Plutil
     io.close if io && !io.closed?
   end
 
-  def output_args; @out && ['-o', normalize_io_arg(@out)]; end
-  def input_args; @in && ['--', normalize_io_arg(@in)]; end
-  def stdin?; @in.to_s == 'stdin'; end
+  def output_args
+    @out && ['-o', normalize_io_arg(@out)]
+  end
+
+  def input_args
+    @in && ['--', normalize_io_arg(@in)]
+  end
+
+  def stdin?
+    @in.to_s == 'stdin'
+  end
 
   private
+
   def cmd
-    ['plutil', "-#@command"] + Array(@args.map(&:to_s)) + Array(output_args) + Array(input_args)
+    ['plutil', "-#{@command}"] + Array(@args.map(&:to_s)) + Array(output_args) + Array(input_args)
   end
 
   def normalize_io_arg(io)
