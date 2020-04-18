@@ -8,6 +8,7 @@ gem 'activesupport'
 gem 'plist'
 
 group :development do
+  gem 'overcommit', require: false
   gem 'rspec'
   gem 'rubocop', require: false
 end

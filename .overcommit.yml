@@ -1,0 +1,53 @@
+gemfile: Gemfile
+
+CommitMsg:
+  CapitalizedSubject:
+    enabled: true
+  EmptyMessage:
+    enabled: true
+  GerritChangeId:
+    enabled: true
+  HardTabs:
+    enabled: true
+  SingleLineSubject:
+    enabled: true
+  TextWidth:
+    enabled: true
+  TrailingPeriod:
+    enabled: true
+
+PreCommit:
+  BundleCheck:
+    enabled: true
+  RuboCop:
+    enabled: true
+    on_warn: fail
+  TrailingWhitespace:
+    enabled: true
+
+PostCheckout:
+  ALL:
+    quiet: true
+  BundleInstall:
+    enabled: true
+    on_warn: fail
+  IndexTags:
+    enabled: true
+
+PostMerge:
+  BundleInstall:
+    enabled: true
+    on_warn: fail
+
+PostRewrite:
+  BundleInstall:
+    enabled: true
+    on_warn: fail
+
+PreRebase:
+  MergedCommits:
+    enabled: true
+
+PrePush:
+  RSpec:
+    enabled: true
