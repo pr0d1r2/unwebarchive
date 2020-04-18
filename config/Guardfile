@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-directories %w[config lib spec/lib]
+directories %w[config lib spec]
 
 guard :rspec, cmd: 'bundle exec rspec' do
   require 'guard/rspec/dsl'

@@ -8,14 +8,9 @@ require_relative '../../lib/unwebarchive'
 RSpec.describe UnWebarchive do
   subject { described_class.new(webarchive, exportdir) }
 
-  let(:webarchive_source) { File.expand_path('../../testing-data/webarchives/swprs.org.webarchive', __dir__) }
-  let(:webarchive) { File.expand_path('../../swprs.org.webarchive', __dir__) }
-  let(:exportdir) { File.expand_path('../../swprs.org', __dir__) }
+  let(:webarchive_name) { 'swprs.org' }
 
-  before do
-    cleanup
-    FileUtils.cp(webarchive_source, webarchive)
-  end
+  include_context :webarchive_testing_data
 
   specify do
     expect { subject.extract }.to raise_error(Errno::ENAMETOOLONG) # TODO: add support for shortening names
@@ -28,12 +23,5 @@ RSpec.describe UnWebarchive do
       expect(File.exist?(file)).to be_truthy
       expect(Digest::MD5.hexdigest(File.read(file))).to eq(md5)
     end
-  end
-
-  after { cleanup }
-
-  def cleanup
-    FileUtils.rm_rf(exportdir) if File.directory?(exportdir)
-    FileUtils.rm_f(webarchive) if File.exist?(webarchive)
   end
 end
