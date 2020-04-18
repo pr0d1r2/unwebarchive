@@ -23,4 +23,4 @@ require_relative 'lib/unwebarchive'
 webarchive = ARGV.shift
 exportdir = File.basename(webarchive, ".webarchive")
 
-UnWebarchive.new(webarchive, exportdir)
+UnWebarchive.extract(webarchive, exportdir)

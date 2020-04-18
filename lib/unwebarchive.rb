@@ -6,7 +6,13 @@ class UnWebarchive
   def initialize(webarchive, exportdir)
     @file = webarchive
     @dir  = exportdir
+  end
 
+  def self.extract(webarchive, exportdir)
+    new(webarchive, exportdir).extract
+  end
+
+  def extract
     prepare_exportdir
     parse_webarchive
   end
