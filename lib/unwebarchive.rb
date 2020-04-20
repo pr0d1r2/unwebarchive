@@ -1,10 +1,13 @@
 # frozen_string_literal: true
 
 require 'fileutils'
-require 'plist'
 require_relative 'plutil'
+require_relative 'webarchive'
 
 class UnWebarchive
+  ADJUSTABLE_FORMATS = %w[.html .css].freeze
+  EXEMPTED_FORMATS = %w[.png .jpg .gif .svg .woff .woff2 .aspx .js].freeze
+
   def initialize(webarchive, exportdir)
     @file = webarchive
     @dir  = exportdir
@@ -30,15 +33,7 @@ class UnWebarchive
 
   def parse_webarchive
     FileUtils.cd(@dir) do
-      system("plutil -convert xml1 #{@file}")
-      plist = Plist.parse_xml(File.read(@file))
-      file = plist['WebMainResource']['WebResourceURL']
-      data = plist['WebMainResource']['WebResourceData'].read
-      data.gsub!(%r{file:///}, './')
-      export('file:///index.html', data)
-      plist['WebSubresources'].each do |res|
-        file = res['WebResourceURL']
-        data = res['WebResourceData'].read
+      Webarchive.resources(@file).each do |file, data|
         export(file, data)
       end
     end
@@ -66,19 +61,26 @@ class UnWebarchive
   end
 
   def fix_paths(name, resource_data)
-    exempted_formats = ['.png', '.jpg', '.gif', '.svg', '.woff', '.woff2', '.aspx', '.js']
-    if File.extname(name.split('?').first) == '.html'
+    format = File.extname(name.split('?').first)
+    if ADJUSTABLE_FORMATS.include?(format)
       puts "[INFO] Fixing paths on '#{@dir}/#{name}' ..."
-      resource_data.gsub!(%r{href="[^=]*http[^=]*://}, 'href="')
-      resource_data.gsub!(%r{src="[^=]*http[^=]*://}, 'src="')
-    elsif File.extname(name.split('?').first) == '.css'
-      resource_data.gsub!(%r{url\('[^\)]*http[^\)]*://}, "url('../../")
-      resource_data.gsub!(%r{url\([^'\)]*http[^'\)]*://}, 'url(../../')
-    elsif exempted_formats.include? File.extname(name.split('?').first)
+      resource_data = adjust(resource_data, format)
+    elsif EXEMPTED_FORMATS.include?(format)
       puts "[INFO] Exempted path analisis on '#{@dir}/#{name}' ..."
     else
       puts "[WARN] Avoiding paths analisis on '#{@dir}/#{name}' ..."
     end
     resource_data
+  end
+
+  def adjust(resource_data, format)
+    case format
+    when '.html'
+      resource_data.gsub!(%r{href="[^=]*http[^=]*://}, 'href="')
+      resource_data.gsub!(%r{src="[^=]*http[^=]*://}, 'src="')
+    when '.css'
+      resource_data.gsub!(%r{url\('[^\)]*http[^\)]*://}, "url('../../")
+      resource_data.gsub!(%r{url\([^'\)]*http[^'\)]*://}, 'url(../../')
+    end
   end
 end

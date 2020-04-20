@@ -15,4 +15,10 @@ guard :rspec, cmd: 'bundle exec rspec' do
   # Ruby files
   ruby = dsl.ruby
   dsl.watch_spec_files_for(ruby.lib_files)
+
+  # Related files
+  watch('lib/plutil.rb') { 'spec/lib/webarchive_spec.rb' }
+  %w[webarchive plutil].each do |unwebarchive_dependency|
+    watch("lib/#{unwebarchive_dependency}.rb") { 'spec/lib/unwebarchive_spec.rb' }
+  end
 end
