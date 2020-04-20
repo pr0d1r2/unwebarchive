@@ -1,4 +1,4 @@
-gemfile: Gemfile
+gemfile: .overcommit_gems.rb
 
 CommitMsg:
   CapitalizedSubject:
@@ -20,6 +20,9 @@ PreCommit:
   BundleCheck:
     enabled: true
   RuboCop:
+    enabled: true
+    on_warn: fail
+  ShellCheck:
     enabled: true
     on_warn: fail
   TrailingWhitespace:
