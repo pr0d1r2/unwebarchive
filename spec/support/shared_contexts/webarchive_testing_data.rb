@@ -3,11 +3,10 @@
 require 'yaml'
 
 RSpec.shared_context :webarchive_testing_data do
-  let(:webarchive_source) { File.expand_path("../../../testing-data/webarchives/#{webarchive_name}.webarchive", __dir__) }
-  let(:webarchive) { File.expand_path("../../../#{webarchive_name}.webarchive", __dir__) }
+  let(:webarchive) { File.expand_path("../../../testing-data/webarchives/#{webarchive_name}.webarchive", __dir__) }
   let(:exportdir) { File.expand_path("../../../#{webarchive_name}", __dir__) }
 
-  let(:contained_resources_yml) { "#{webarchive_source}.yml" }
+  let(:contained_resources_yml) { "#{webarchive}.yml" }
   let(:contained_resources) { YAML.load_file(contained_resources_yml) }
 
   let(:extracted_resources) do
@@ -19,15 +18,11 @@ RSpec.shared_context :webarchive_testing_data do
     }
   end
 
-  before do
-    cleanup
-    FileUtils.cp(webarchive_source, webarchive)
-  end
+  before { cleanup }
 
   after { cleanup }
 
   def cleanup
     FileUtils.rm_rf(exportdir) if File.directory?(exportdir)
-    FileUtils.rm_f(webarchive) if File.exist?(webarchive)
   end
 end
