@@ -3,7 +3,9 @@
 require 'active_support/core_ext/array'
 require 'json'
 
+# Perform plist operations
 class Plutil
+  # Operate on JSON plists
   module JSON
     def self.load(plist)
       Plutil.convert plist, to: :json do |converted_io|

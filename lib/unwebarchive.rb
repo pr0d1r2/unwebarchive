@@ -4,6 +4,7 @@ require 'fileutils'
 require_relative 'plutil'
 require_relative 'webarchive'
 
+# Extracts content of "*.webarchive" file to a directory
 class UnWebarchive
   ADJUSTABLE_FORMATS = %w[.html .css].freeze
   EXEMPTED_FORMATS = %w[.png .jpg .gif .svg .woff .woff2 .aspx .js].freeze
