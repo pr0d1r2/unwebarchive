@@ -7,7 +7,7 @@ class Plutil
   module JSON
     def self.load(plist)
       Plutil.convert plist, to: :json do |converted_io|
-        ::JSON.load(converted_io)
+        ::JSON.parse(converted_io)
       end
     end
 
