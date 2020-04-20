@@ -59,10 +59,10 @@ class Plutil
 
   # Usage:
   #
-  #   Plutil.replace(plist, 'name', data, as: 'xml', &:read)
+  #   Plutil.replace(plist, 'name', data, format: 'xml', &:read)
   #
-  def self.replace(path, keypath, data, as: :xml, &block)
-    plutil(:replace, keypath, "-#{as}", data, file: path.to_s, &block)
+  def self.replace(path, keypath, data, format: :xml, &block)
+    plutil(:replace, keypath, "-#{format}", data, file: path.to_s, &block)
   end
 
   # Shorthand to `Plutil::JSON.load(plist)`

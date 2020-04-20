@@ -7,13 +7,6 @@
 # versions of RuboCop, may require this file to be generated again.
 
 # Offense count: 1
-# Configuration parameters: MinNameLength, AllowNamesEndingInNumbers, AllowedNames, ForbiddenNames.
-# AllowedNames: io, id, to, by, on, in, at, ip, db, os, pp
-Naming/MethodParameterName:
-  Exclude:
-    - 'lib/plutil.rb'
-
-# Offense count: 1
 # Cop supports --auto-correct.
 # Configuration parameters: AutoCorrect.
 Security/JSONLoad:
